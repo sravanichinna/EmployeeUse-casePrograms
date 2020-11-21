@@ -2,21 +2,30 @@
 IS_PART_TIME=1
 IS_FULL_TIME=2
 EMP_RATE_PER_HR=20
+MAX_HRS_IN_MONTH=10
 NUM_WORKING_DAYS=20
-totalSalary=0
-for(( day=1 ; day <= $NUM_WORKING_DAYS; day++ ))
+totalEmpHrs=0
+totalWorkingDays=0
+
+while(( $totalEmpHrs < $MAX_HRS_IN_MONTH && $totalWorkingDays < $NUM_WORKING_DAYS ))
 do
+	((totalWorkingDays++))
+	echo "Total working day: $totalWorkingDays"
 	random=$(( RANDOM%3 ))
+
 	case $random in
+
 		$IS_PART_TIME) empHrs=4
 			;;
 		$IS_FULL_TIME) empHrs=8
 			;;
 		*) empHrs=0
-	esac
-	salary=$(( $empHrs * $ EMP_RATE_PER_HR))
-	echo "Day: $day Salary: $salary"
-	totalSalary=$(( $totalSalary + $salary ))
-done
 
+	esac
+
+	totalEmpHrs=$(( $totalEmpHrs + $empHrs ))
+	echo "Total Employee Hours: $totalEmpHrs"
+
+done
+totalSalary=$(( $totalEmpHrs * $EMP_RATE_PER_HR))
 echo "Total Salary: $totalSalary"
