@@ -2,30 +2,39 @@
 IS_PART_TIME=1
 IS_FULL_TIME=2
 EMP_RATE_PER_HR=20
-MAX_HRS_IN_MONTH=10
+MAX_HRS_IN_MONTH=100
 NUM_WORKING_DAYS=20
 totalEmpHrs=0
 totalWorkingDays=0
+totalWorkHours=0
+function calculateDailyWage()
+{
+	empHrs=$1
+	daySalary=$(( $empHrs * $EMP_RATE_PER_HR ))
+	echo $daySalary
+}
 
-while(( $totalEmpHrs < $MAX_HRS_IN_MONTH && $totalWorkingDays < $NUM_WORKING_DAYS ))
-do
-	((totalWorkingDays++))
-	echo "Total working day: $totalWorkingDays"
-	random=$(( RANDOM%3 ))
-
-	case $random in
-
-		$IS_PART_TIME) empHrs=4
+function getWorkingHours()
+{
+	case $1 in
+		$IS_FULL_TIME ) empHrs=8
 			;;
-		$IS_FULL_TIME) empHrs=8
+		$IS_PART_TIME ) empHrs=4
 			;;
 		*) empHrs=0
-
+			;;
 	esac
+	echo $empHrs
+}
 
-	totalEmpHrs=$(( $totalEmpHrs + $empHrs ))
-	echo "Total Employee Hours: $totalEmpHrs"
-
+while(( $totalWorkHours < $MAX_HRS_IN_MONTH && $totalWorkingDays < $NUM_WORKING_DAYS ))
+do
+	((totalWorkingDays++))
+	workHours="$( getWorkingHours $(( RANDOM%3 )) )"
+	echo "Work hours from function getWorkingHours()::::::::::>>> $workHours "
+	totalWorkHours=$(( $totalWorkHours + $workHours ))
+	echo -e "TotalWorkHours: $totalWorkHours\n"
 done
-totalSalary=$(( $totalEmpHrs * $EMP_RATE_PER_HR))
-echo "Total Salary: $totalSalary"
+
+totalSalary=$(( $totalWorkHours * $EMP_RATE_PER_HR ));
+echo "Total salary: $totalSalary"
